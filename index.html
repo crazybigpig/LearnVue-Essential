@@ -10,14 +10,15 @@
 <div id="app">
   {{ message }}
 </div>
+-----------------------
 <div id="app2">
   <span v-bind:title="message">鼠标悬停几秒钟查看此处动态绑定的提示信息！</span>
 </div>
-
+-----------------------
 <div id="app3">
   <p v-if="seen">现在你可以看见我了</p>
 </div>
-
+-----------------------
 <div id="app4">
   <ol>
     <li v-for="todo in todos">
@@ -25,43 +26,79 @@
     </li>
   </ol>
 </div>
-
+-----------------------
 <div id="app5">
   <p>{{message}}</p>
   <button v-on:click="reverseMessage">倒排</button>
 </div>
-
+-----------------------
 <div id="app6">
-  <p>{{message}}</p>
+  <p>{{message | capitalize}}</p>
   <input v-model="message"/>
 </div>
+-----------------------
 <div id="app7">
-  <ol>
-    <!-- 创建一个 todo-item 组件的实例 -->
-    <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
-  </ol>
+  创建一个 todo-item 组件的实例
+  <ul>
+
+    <todo-item v-for="item in groceryList" v-bind:todo1="item"></todo-item>
+  </ul>
+</div>
+--------------------
+<div v-if="Math.random() > 0.5">
+  Now you see me
+</div>
+<div v-else>
+  Now you don't
 </div>
 
+----------------------
+<div id="app8">
+  <button @click.prevent="warn('Form cannot be submitted yet.', $event)">Submit</button>
+</div>
+
+-----------------------
+<div id="app9">
+  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+  <label for="jack">Jack</label>
+  <input type="checkbox" id="john" value="John" v-model="checkedNames">
+  <label for="john">John</label>
+  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+  <label for="mike">Mike</label>
+  <br>
+  <span>Checked names: {{ checkedNames }}</span>
+</div>
+-----------------------
+<div id="app10">
+  <my-component></my-component>
+</div>
 </body>
 <script>
   var app = new Vue({
     el: '#app',
     data: {
       message: 'Hello Vue1!'
-    }
+    },
+    beforeCreate: function () {
+      console.log('beforeCreate:' + this.message)
+    },
+    created: function () {
+      console.log('created:' + this.message)
+    },
+
   })
 
   var app2 = new Vue({
     el: '#app2',
     data: {
-      message: 'Hello Vue1! ' + new Date().toLocaleDateString()
+      message: 'Hello Vue1! ' + new Date()
     }
   })
 
   var app3 = new Vue({
     el: '#app3',
     data: {
-      seen: false
+      seen: true
     }
   })
 
@@ -90,22 +127,60 @@
   var app6 = new Vue({
     el: '#app6',
     data: {
-      message: '1'
+      message: ''
+    },
+    filters: {
+      capitalize: function (value) {
+        if (!value) return
+        value = value.toString()
+        return value[0].toUpperCase() + value.slice(1)
+      }
     }
   })
   Vue.component('todo-item', {
-    props: ['todo'],
-    template: '<li>{{ todo.text }}</li>'
+    props: ['todo1'],
+    template: '<li>{{ todo1.text }}</li>'
   })
   var app7 = new Vue({
-    el:'#app7',
-    data:{
-        groceryList:[
-          {text:'蔬菜'},
-          {text:'水果'}
-        ]
+    el: '#app7',
+    data: {
+      groceryList: [
+        {text: '蔬菜'},
+        {text: '水果'}
+      ]
     }
   })
 
+  var app8 = new Vue({
+    el:'#app8',
+    data:{
+        name:'Vue.js'
+    },
+    methods:{
+        warn:function(message,event){
+
+              alert(message)
+        }
+    }
+  })
+  var app9 = new Vue({
+    el:'#app9',
+    data:{
+      checkedNames:[]
+    }
+  })
+
+  Vue.component('my-component',{
+      template:'<div>{{message}}</div>',
+      data:function(){
+        return {message:'This is my component!'}
+      }
+  })
+
+
+  var app10 = new Vue({
+    el:'#app10'
+
+  })
 </script>
 </html>
