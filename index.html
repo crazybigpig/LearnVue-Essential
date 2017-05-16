@@ -1,14 +1,111 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>essential</title>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <title>essential</title>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
 
-  </head>
-  <body>
-  <div id="app">
-    {{ message }}
-  </div>
-    <!-- built files will be auto injected -->
-  </body>
+</head>
+<body>
+<div id="app">
+  {{ message }}
+</div>
+<div id="app2">
+  <span v-bind:title="message">鼠标悬停几秒钟查看此处动态绑定的提示信息！</span>
+</div>
+
+<div id="app3">
+  <p v-if="seen">现在你可以看见我了</p>
+</div>
+
+<div id="app4">
+  <ol>
+    <li v-for="todo in todos">
+      {{todo.text}}
+    </li>
+  </ol>
+</div>
+
+<div id="app5">
+  <p>{{message}}</p>
+  <button v-on:click="reverseMessage">倒排</button>
+</div>
+
+<div id="app6">
+  <p>{{message}}</p>
+  <input v-model="message"/>
+</div>
+<div id="app7">
+  <ol>
+    <!-- 创建一个 todo-item 组件的实例 -->
+    <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+  </ol>
+</div>
+
+</body>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      message: 'Hello Vue1!'
+    }
+  })
+
+  var app2 = new Vue({
+    el: '#app2',
+    data: {
+      message: 'Hello Vue1! ' + new Date().toLocaleDateString()
+    }
+  })
+
+  var app3 = new Vue({
+    el: '#app3',
+    data: {
+      seen: false
+    }
+  })
+
+  var app4 = new Vue({
+    el: '#app4',
+    data: {
+      todos: [
+        {text: '333'},
+        {text: '222'}
+      ]
+    }
+  })
+
+  var app5 = new Vue({
+    el: '#app5',
+    data: {
+      message: '123456789'
+    },
+    methods: {
+      reverseMessage: function () {
+        this.message = this.message.split('').reverse().join('');
+      }
+    }
+  })
+
+  var app6 = new Vue({
+    el: '#app6',
+    data: {
+      message: '1'
+    }
+  })
+  Vue.component('todo-item', {
+    props: ['todo'],
+    template: '<li>{{ todo.text }}</li>'
+  })
+  var app7 = new Vue({
+    el:'#app7',
+    data:{
+        groceryList:[
+          {text:'蔬菜'},
+          {text:'水果'}
+        ]
+    }
+  })
+
+</script>
 </html>
